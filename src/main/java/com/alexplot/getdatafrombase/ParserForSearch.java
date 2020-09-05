@@ -39,7 +39,7 @@ public class ParserForSearch {
 
 
     public static JSONObject getResultByCriteria(JSONObject criteria) {
-        Connection connection = null;
+        Connection connection;
         JSONObject resultObject = new JSONObject();
         resultObject.put("criteria", criteria);
 
