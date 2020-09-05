@@ -73,6 +73,16 @@ public class ParserForSearch {
                 }
 
             } else if (criteria.get("minExpenses") != null) {
+                statement = connection.prepareStatement(SELECT_QUERY_BUYERS_BETWEEN_SUM);
+                statement.setLong(1, (Long) criteria.get("minExpenses"));
+                statement.setLong(2, (Long) criteria.get("maxExpenses"));
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    JSONObject person = new JSONObject();
+                    person.put("lastName", resultSet.getString("last_name"));
+                    person.put("firstName", resultSet.getString("first_name"));
+                    resultArray.add(person);
+                }
 
             } else if (criteria.get("badCustomers") != null) {
 
