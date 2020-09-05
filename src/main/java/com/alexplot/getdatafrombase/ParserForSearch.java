@@ -3,9 +3,7 @@ package com.alexplot.getdatafrombase;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ParserForSearch {
 
@@ -45,13 +43,23 @@ public class ParserForSearch {
         JSONObject resultObject = new JSONObject();
         resultObject.put("criteria", criteria);
 
+        JSONArray resultArray = new JSONArray();
+        PreparedStatement statement;
 
-        JSONArray resultSet = new JSONArray();
         try {
             connection = DriverManager.getConnection(ConnectionData.URL,
                     ConnectionData.USER, ConnectionData.PASSWORD);
 
             if (criteria.get("lastName") != null) {
+                statement = connection.prepareStatement(SELECT_QUERY_FIRSTNAME_BYERS);
+                statement.setString(1, (String) criteria.get("lastName"));
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    JSONObject person = new JSONObject();
+                    person.put("lastName", resultSet.getString("last_name"));
+                    person.put("firstName", resultSet.getString("first_name"));
+                    resultArray.add(person);
+                }
 
 
             } else if (criteria.get("productName") != null) {
@@ -62,12 +70,14 @@ public class ParserForSearch {
 
             }
 
+            resultObject.put("results", resultArray);
 
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        System.out.println(resultObject.toJSONString());
         return resultObject;
     }
 
