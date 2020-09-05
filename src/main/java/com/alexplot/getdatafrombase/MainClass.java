@@ -28,11 +28,9 @@ public class MainClass {
                 try {
                     FileReader fileReader = new FileReader(inFileName);
                     JSONObject jsonObject = (JSONObject) parser.parse(fileReader);
-                    JSONArray jsonArray = (JSONArray) jsonObject.get("criterias");
-                    for(int i = 0; i < jsonArray.size(); i++) {
-
-
-
+                    JSONArray jsonCriteriasArray = (JSONArray) jsonObject.get("criterias");
+                    for(int i = 0; i < jsonCriteriasArray.size(); i++) {
+                        JSONObject jsonObject1 = ParserForSearch.getResultByCriteria((JSONObject) jsonCriteriasArray.get(i));
 
 
                     }
