@@ -16,7 +16,6 @@ public class MainClass {
 
     public static void main(String[] args) {
 
-
         Commands command = Commands.fromValue(args[0]);
         String inFileName;
         String outFileName;
@@ -58,6 +57,8 @@ public class MainClass {
 
                 break;
             case STAT:
+
+
 
                 break;
             default:
