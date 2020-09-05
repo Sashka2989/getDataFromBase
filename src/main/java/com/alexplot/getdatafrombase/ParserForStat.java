@@ -27,12 +27,28 @@ public class ParserForStat {
         String startDateString = (String) inObject.get("startDate");
         String endDateString = (String) inObject.get("endDate");
 
+        if (!startDateString.matches("\\d{4}\\-\\d{2}\\-\\d{2}")
+                || !endDateString.matches("\\d{4}\\-\\d{2}\\-\\d{2}")) {
+            JSONObject errorObject = new JSONObject();
+            errorObject.put("Type", "Error");
+            errorObject.put("Message", "Uncorrected date format. Must be YYYY-MM-DD");
+            return errorObject;
+        }
+
 
         startDate = Date.valueOf(startDateString);
         endDate = Date.valueOf(endDateString);
 
+        if (getCountDayBetweenDates(startDateString, endDateString) < 0) {
+            JSONObject errorObject = new JSONObject();
+            errorObject.put("Tupe", "Error");
+            errorObject.put("Message", "startDate greater then endDate");
+            return errorObject;
+        }
+
         resultObject.put("type", "stat");
         resultObject.put("totalDays", getCountDayBetweenDates(startDateString, endDateString));
+
 
         try {
             connection = DriverManager.getConnection(ConnectionData.URL,

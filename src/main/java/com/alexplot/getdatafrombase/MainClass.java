@@ -26,28 +26,33 @@ public class MainClass {
 
         switch (command) {
             case SEARCH:
-                jsonObjectForWriteInFile.put("type", "search");
-
-                JSONArray jsonArrayForResultSearch = new JSONArray();
-
                 try {
                     FileReader fileReader = new FileReader(inFileName);
                     JSONObject jsonObject = (JSONObject) parser.parse(fileReader);
-                    JSONArray jsonCriteriasArray = (JSONArray) jsonObject.get("criterias");
-                    for(int i = 0; i < jsonCriteriasArray.size(); i++) {
-                        JSONObject jsonObjectCriteria = ParserForSearch.getResultByCriteria((JSONObject) jsonCriteriasArray.get(i));
-                        jsonArrayForResultSearch.add(jsonObjectCriteria);
-                    }
-                    jsonObjectForWriteInFile.put("results", jsonArrayForResultSearch);
 
+                    jsonObjectForWriteInFile = ParserForSearch.getResult(jsonObject);
 
                     FileWriter fileWriter = new FileWriter(outFileName);
                     fileWriter.write(jsonObjectForWriteInFile.toJSONString());
                     fileWriter.flush();
                     fileWriter.close();
 
-                } catch (IOException | ParseException e) {
+                } catch (ParseException e) {
                     e.printStackTrace();
+
+                    JSONObject errorObject = new JSONObject();
+                    errorObject.put("Type", "Error");
+                    errorObject.put("Message", "Input file contains incorrect data format");
+                    try {
+                        FileWriter fileWriter = new FileWriter(outFileName);
+                        fileWriter.write(errorObject.toJSONString());
+                        fileWriter.flush();
+                        fileWriter.close();
+                    } catch (IOException ioE) {
+                        ioE.printStackTrace();
+                    }
+                } catch (IOException ioE) {
+                    ioE.printStackTrace();
                 }
 
                 break;
@@ -68,7 +73,9 @@ public class MainClass {
                 }
                 break;
             default:
-
+                JSONObject jsonObjectError = new JSONObject();
+                jsonObjectError.put("type", "Error");
+                jsonObjectError.put("Message", "Unknown command");
 
         }
     }
