@@ -21,12 +21,14 @@ public class MainClass {
         String outFileName;
         inFileName = args[1];
         outFileName = args[2];
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObjectForWriteInFile = new JSONObject();
 
         switch (command) {
             case SEARCH:
-                JSONParser parser = new JSONParser();
 
-                JSONObject jsonObjectForWriteInFile = new JSONObject();
+
+
                 jsonObjectForWriteInFile.put("type", "search");
 
                 JSONArray jsonArrayForResultSearch = new JSONArray();
@@ -57,9 +59,17 @@ public class MainClass {
 
                 break;
             case STAT:
+                try {
+                    FileReader fileReaderStat = new FileReader(inFileName);
+                    JSONObject jsonObjectStat = (JSONObject) parser.parse(fileReaderStat);
+                    jsonObjectForWriteInFile = ParserForStat.getResult(jsonObjectStat);
+                    System.out.println(jsonObjectForWriteInFile.toJSONString());
 
 
 
+                } catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             default:
 
