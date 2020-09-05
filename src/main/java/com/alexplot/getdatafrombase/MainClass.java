@@ -1,6 +1,14 @@
 package com.alexplot.getdatafrombase;
 
 import com.alexplot.getdatafrombase.Enums.Commands;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 
 public class MainClass {
@@ -16,7 +24,22 @@ public class MainClass {
 
         switch (command) {
             case SEARCH:
+                JSONParser parser = new JSONParser();
+                try {
+                    FileReader fileReader = new FileReader(inFileName);
+                    JSONObject jsonObject = (JSONObject) parser.parse(fileReader);
+                    JSONArray jsonArray = (JSONArray) jsonObject.get("criterias");
+                    for(int i = 0; i < jsonArray.size(); i++) {
 
+
+
+
+
+                    }
+
+                } catch (IOException | ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case STAT:
 
