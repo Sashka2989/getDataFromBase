@@ -13,6 +13,13 @@ public class ParserForStat {
     private static Date startDate;
     private static Date endDate;
 
+    private final static String SELECT_QUERY_TOTAL_SUM_AND_AVG =
+            "SELECT sum(products.price) as total_Expenses, round(avg(products.price), 2) as avg_Expenses FROM products " +
+                    "INNER JOIN buy " +
+                    "ON buy.pruduct_id = products.id " +
+                    "WHERE buy.purchase_date BETWEEN ? AND ?";
+
+
     public static JSONObject getResult(JSONObject inObject) {
         JSONObject resultObject = new JSONObject();
         Connection connection;
@@ -31,11 +38,16 @@ public class ParserForStat {
             connection = DriverManager.getConnection(ConnectionData.URL,
                     ConnectionData.USER, ConnectionData.PASSWORD);
 
-            System.out.println(createPersonJsonObject(connection).toJSONString());
+            resultObject.put("customers", createPersonJsonObject(connection));
 
+            PreparedStatement statement = connection.prepareStatement(SELECT_QUERY_TOTAL_SUM_AND_AVG);
+            statement.setDate(1, startDate);
+            statement.setDate(2, endDate);
 
-
-
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            resultObject.put("totalExpenses", resultSet.getLong("total_expenses"));
+            resultObject.put("avgExpenses", resultSet.getDouble("avg_expenses"));
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();

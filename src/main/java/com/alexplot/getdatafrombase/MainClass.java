@@ -26,9 +26,6 @@ public class MainClass {
 
         switch (command) {
             case SEARCH:
-
-
-
                 jsonObjectForWriteInFile.put("type", "search");
 
                 JSONArray jsonArrayForResultSearch = new JSONArray();
@@ -43,17 +40,13 @@ public class MainClass {
                     }
                     jsonObjectForWriteInFile.put("results", jsonArrayForResultSearch);
 
-                    System.out.println(jsonObjectForWriteInFile.toJSONString());
-                } catch (IOException | ParseException e) {
-                    e.printStackTrace();
-                }
 
-                try {
                     FileWriter fileWriter = new FileWriter(outFileName);
                     fileWriter.write(jsonObjectForWriteInFile.toJSONString());
                     fileWriter.flush();
                     fileWriter.close();
-                } catch (IOException e) {
+
+                } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
 
@@ -63,8 +56,11 @@ public class MainClass {
                     FileReader fileReaderStat = new FileReader(inFileName);
                     JSONObject jsonObjectStat = (JSONObject) parser.parse(fileReaderStat);
                     jsonObjectForWriteInFile = ParserForStat.getResult(jsonObjectStat);
-                    System.out.println(jsonObjectForWriteInFile.toJSONString());
 
+                    FileWriter fileWriter = new FileWriter(outFileName);
+                    fileWriter.write(jsonObjectForWriteInFile.toJSONString());
+                    fileWriter.flush();
+                    fileWriter.close();
 
 
                 } catch (IOException | ParseException e) {
@@ -72,6 +68,7 @@ public class MainClass {
                 }
                 break;
             default:
+
 
         }
     }

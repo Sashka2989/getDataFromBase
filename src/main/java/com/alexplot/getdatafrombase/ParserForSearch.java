@@ -43,7 +43,7 @@ public class ParserForSearch {
         JSONObject resultObject = new JSONObject();
         resultObject.put("criteria", criteria);
 
-        JSONArray resultArray = new JSONArray();
+        JSONArray resultArray;
         PreparedStatement statement;
 
         try {
@@ -78,7 +78,6 @@ public class ParserForSearch {
             e.printStackTrace();
         }
 
-        System.out.println(resultObject.toJSONString());
         return resultObject;
     }
 
