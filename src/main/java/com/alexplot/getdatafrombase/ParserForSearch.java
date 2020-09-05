@@ -53,50 +53,23 @@ public class ParserForSearch {
             if (criteria.get("lastName") != null) {
                 statement = connection.prepareStatement(SELECT_QUERY_FIRSTNAME_BYERS);
                 statement.setString(1, (String) criteria.get("lastName"));
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    JSONObject person = new JSONObject();
-                    person.put("lastName", resultSet.getString("last_name"));
-                    person.put("firstName", resultSet.getString("first_name"));
-                    resultArray.add(person);
-                }
             } else if (criteria.get("productName") != null) {
                 statement = connection.prepareStatement(SELECT_QUERY_BUYERS_BUY_PRODUCT);
                 statement.setString(1, (String) criteria.get("productName"));
                 statement.setLong(2, (Long) criteria.get("minTimes"));
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    JSONObject person = new JSONObject();
-                    person.put("lastName", resultSet.getString("last_name"));
-                    person.put("firstName", resultSet.getString("first_name"));
-                    resultArray.add(person);
-                }
-
             } else if (criteria.get("minExpenses") != null) {
                 statement = connection.prepareStatement(SELECT_QUERY_BUYERS_BETWEEN_SUM);
                 statement.setLong(1, (Long) criteria.get("minExpenses"));
                 statement.setLong(2, (Long) criteria.get("maxExpenses"));
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    JSONObject person = new JSONObject();
-                    person.put("lastName", resultSet.getString("last_name"));
-                    person.put("firstName", resultSet.getString("first_name"));
-                    resultArray.add(person);
-                }
-
             } else if (criteria.get("badCustomers") != null) {
                 statement = connection.prepareStatement(SELECT_QUERY_PASSIVE_BUYERS);
                 statement.setLong(1, (Long) criteria.get("badCustomers"));
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    JSONObject person = new JSONObject();
-                    person.put("lastName", resultSet.getString("last_name"));
-                    person.put("firstName", resultSet.getString("first_name"));
-                    resultArray.add(person);
-                }
-
+            } else {
+                JSONObject errorObject = new JSONObject();
+                errorObject.put("Error", "Unknow criteria");
+                return errorObject;
             }
-
+            resultArray = getResults(statement);
             resultObject.put("results", resultArray);
 
             connection.close();
@@ -108,6 +81,17 @@ public class ParserForSearch {
         return resultObject;
     }
 
+    private static JSONArray getResults(PreparedStatement statement) throws SQLException {
+        JSONArray resultArray = new JSONArray();
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            JSONObject person = new JSONObject();
+            person.put("lastName", resultSet.getString("last_name"));
+            person.put("firstName", resultSet.getString("first_name"));
+            resultArray.add(person);
+        }
+        return resultArray;
+    }
 
 
 
