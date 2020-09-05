@@ -55,6 +55,7 @@ public class MainClass {
                     ioE.printStackTrace();
                 }
 
+                System.out.println("Command SEARCH completed successfully");
                 break;
             case STAT:
                 try {
@@ -71,8 +72,11 @@ public class MainClass {
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
+                System.out.println("Command STAT completed successfully");
                 break;
+
             default:
+                System.out.println("Unknown command");
                 JSONObject jsonObjectError = new JSONObject();
                 jsonObjectError.put("type", "Error");
                 jsonObjectError.put("Message", "Unknown command");

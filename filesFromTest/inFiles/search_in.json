@@ -1,0 +1,10 @@
+{
+"criterias": [
+ {"lastName": "Allam"},
+ {"productName": "Juice - Ocean Spray Cranberry", "minTimes": 1},
+ {"minExpenses": 112, "maxExpenses": 2000},
+ {"badCustomers": 3},
+ {"productName": :"Steampan - Foil", "minTimes": 0},
+ {"lastName": "Tees"}
+ ]
+}
