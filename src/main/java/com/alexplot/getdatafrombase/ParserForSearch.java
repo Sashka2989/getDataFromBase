@@ -11,7 +11,6 @@ public class ParserForSearch {
 
         if (criteria.get("lastName") != null) {
 
-
         } else if(criteria.get("productName") != null) {
 
         } else if(criteria.get("minExpenses") != null) {
