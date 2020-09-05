@@ -2,6 +2,10 @@ package com.alexplot.getdatafrombase;
 
 import org.json.simple.JSONObject;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class ParserForStat {
     private static final String SELECT_QUERY_GET_PRODUCTS =
             "SELECT products.name, sum(products.price) FROM buyers " +
@@ -16,6 +20,19 @@ public class ParserForStat {
 
     public static JSONObject getResult(JSONObject inObject) {
         JSONObject resultObject = new JSONObject();
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection(ConnectionData.URL,
+                    ConnectionData.USER, ConnectionData.PASSWORD);
+
+
+
+
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
 
