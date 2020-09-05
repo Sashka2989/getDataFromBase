@@ -66,7 +66,8 @@ public class ParserForSearch {
                 statement.setLong(1, (Long) criteria.get("badCustomers"));
             } else {
                 JSONObject errorObject = new JSONObject();
-                errorObject.put("Error", "Unknow criteria");
+                errorObject.put("Type", "Error");
+                errorObject.put("Message", "Unknown criteria");
                 return errorObject;
             }
             resultArray = getResults(statement);
