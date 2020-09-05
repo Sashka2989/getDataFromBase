@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 
@@ -45,6 +46,16 @@ public class MainClass {
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
+
+                try {
+                    FileWriter fileWriter = new FileWriter(outFileName);
+                    fileWriter.write(jsonObjectForWriteInFile.toJSONString());
+                    fileWriter.flush();
+                    fileWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 break;
             case STAT:
 
