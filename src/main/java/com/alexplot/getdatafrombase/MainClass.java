@@ -25,16 +25,23 @@ public class MainClass {
         switch (command) {
             case SEARCH:
                 JSONParser parser = new JSONParser();
+
+                JSONObject jsonObjectForWriteInFile = new JSONObject();
+                jsonObjectForWriteInFile.put("type", "search");
+
+                JSONArray jsonArrayForResultSearch = new JSONArray();
+
                 try {
                     FileReader fileReader = new FileReader(inFileName);
                     JSONObject jsonObject = (JSONObject) parser.parse(fileReader);
                     JSONArray jsonCriteriasArray = (JSONArray) jsonObject.get("criterias");
                     for(int i = 0; i < jsonCriteriasArray.size(); i++) {
-                        JSONObject jsonObject1 = ParserForSearch.getResultByCriteria((JSONObject) jsonCriteriasArray.get(i));
-
-
+                        JSONObject jsonObjectCriteria = ParserForSearch.getResultByCriteria((JSONObject) jsonCriteriasArray.get(i));
+                        jsonArrayForResultSearch.add(jsonObjectCriteria);
                     }
+                    jsonObjectForWriteInFile.put("results", jsonArrayForResultSearch);
 
+                    System.out.println(jsonObjectForWriteInFile.toJSONString());
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
