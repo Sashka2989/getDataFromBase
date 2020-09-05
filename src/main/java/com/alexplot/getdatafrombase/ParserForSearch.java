@@ -85,6 +85,15 @@ public class ParserForSearch {
                 }
 
             } else if (criteria.get("badCustomers") != null) {
+                statement = connection.prepareStatement(SELECT_QUERY_PASSIVE_BUYERS);
+                statement.setLong(1, (Long) criteria.get("badCustomers"));
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    JSONObject person = new JSONObject();
+                    person.put("lastName", resultSet.getString("last_name"));
+                    person.put("firstName", resultSet.getString("first_name"));
+                    resultArray.add(person);
+                }
 
             }
 
