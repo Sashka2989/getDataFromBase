@@ -60,9 +60,17 @@ public class ParserForSearch {
                     person.put("firstName", resultSet.getString("first_name"));
                     resultArray.add(person);
                 }
-
-
             } else if (criteria.get("productName") != null) {
+                statement = connection.prepareStatement(SELECT_QUERY_BUYERS_BUY_PRODUCT);
+                statement.setString(1, (String) criteria.get("productName"));
+                statement.setLong(2, (Long) criteria.get("minTimes"));
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    JSONObject person = new JSONObject();
+                    person.put("lastName", resultSet.getString("last_name"));
+                    person.put("firstName", resultSet.getString("first_name"));
+                    resultArray.add(person);
+                }
 
             } else if (criteria.get("minExpenses") != null) {
 
