@@ -31,7 +31,7 @@ public class ParserForStat {
             connection = DriverManager.getConnection(ConnectionData.URL,
                     ConnectionData.USER, ConnectionData.PASSWORD);
 
-            System.out.println(createJsonProductsArray(connection, 2).toJSONString());
+            System.out.println(createPersonJsonObject(connection).toJSONString());
 
 
 
@@ -40,11 +40,6 @@ public class ParserForStat {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
-
-
-
 
 
         return resultObject;
@@ -71,23 +66,55 @@ public class ParserForStat {
             statement.setDate(3, endDate);
 
             ResultSet resultSet = statement.executeQuery();
-
             while (resultSet.next()) {
                 JSONObject productJsonObject = new JSONObject();
-
                 productJsonObject.put("name", resultSet.getString("name"));
                 productJsonObject.put("expenses", resultSet.getLong("sum"));
 
                 productJsonArray.add(productJsonObject);
             }
 
-
         } catch (SQLException e) {
-            System.out.println("Error query");
             e.printStackTrace();
         }
-
         return productJsonArray;
+    }
+
+    private static JSONArray createPersonJsonObject(Connection connection) {
+        JSONArray customersJsonArray = new JSONArray();
+
+        String SELECT_QUERY_GET_CUSTOMERS =
+                "SELECT buyers.id, buyers.last_name, buyers.first_name, sum(products.price) FROM buyers " +
+                        "INNER JOIN buy " +
+                        "ON buyers.id = buy.id_buyer " +
+                        "INNER JOIN products " +
+                        "ON buy.pruduct_id = products.id " +
+                        "WHERE buy.purchase_date BETWEEN ? AND ? " +
+                        "GROUP BY buyers.id, buyers.last_name, buyers.first_name " +
+                        "ORDER BY sum(products.price) DESC";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_QUERY_GET_CUSTOMERS);
+            statement.setDate(1, startDate);
+            statement.setDate(2, endDate);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                JSONObject personJsonObject = new JSONObject();
+                long id_customer = resultSet.getLong("id");
+
+                personJsonObject.put("name", resultSet.getString("last_name")
+                        + " " + resultSet.getString("first_name"));
+                personJsonObject.put("purchases", createJsonProductsArray(connection,
+                        id_customer));
+                personJsonObject.put("totalExpenses", resultSet.getLong("sum"));
+                customersJsonArray.add(personJsonObject);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customersJsonArray;
     }
 
 
