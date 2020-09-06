@@ -80,6 +80,14 @@ public class MainClass {
                 JSONObject jsonObjectError = new JSONObject();
                 jsonObjectError.put("type", "Error");
                 jsonObjectError.put("Message", "Unknown command");
+                try {
+                    FileWriter fileWriter = new FileWriter(outFileName);
+                    fileWriter.write(jsonObjectError.toJSONString());
+                    fileWriter.flush();
+                    fileWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
         }
     }
