@@ -22,7 +22,7 @@ public class MainClass {
         inFileName = args[1];
         outFileName = args[2];
         JSONParser parser = new JSONParser();
-        JSONObject jsonObjectForWriteInFile = new JSONObject();
+        JSONObject jsonObjectForWriteInFile;
 
         switch (command) {
             case SEARCH:
@@ -54,7 +54,6 @@ public class MainClass {
                 } catch (IOException ioE) {
                     ioE.printStackTrace();
                 }
-
                 System.out.println("Command SEARCH completed successfully");
                 break;
             case STAT:
